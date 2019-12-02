@@ -1,21 +1,30 @@
 fs = require('fs');
 
-//gets the numbers from the provided input file, and splits them into an array stripping out the returns
-input = fs.readFileSync('input.txt').toString().split(",");
+for(noun=0; noun<100; noun++){
+    for(verb=0; verb<100; verb++){
+        input = fs.readFileSync('input.txt').toString().split(",");
+        input.splice(1, 1, noun);
+        input.splice(2, 1, verb);
 
+        output = computer(input);
 
-//before running the program, replace position 1 with the value 12 and replace position 2 with the value 2
-input.splice(1, 1, 12);
-input.splice(2, 1, 2);
-
-i = 0;
-while(i<input.length){
-    input[i] == 1 ? addingFunction(input[i+1], input[i+2], input[i+3])
-        : input[i] == 2 ? multiplyingFunction(input[i+1], input[i+2], input[i+3])
-        : i = (input.length +1);
+        if (output == 19690720){
+            totalAnswer = (100*noun) + verb;
+            console.log(noun, verb);
+            console.log(totalAnswer);
+        }
+    }
 }
-console.log("end input " + input);
-console.log("end position 0 " + input[0]);
+
+function computer(input){
+    i = 0;
+    while(i<input.length){
+        input[i] == 1 ? addingFunction(input[i+1], input[i+2], input[i+3])
+            : input[i] == 2 ? multiplyingFunction(input[i+1], input[i+2], input[i+3])
+            : i = (input.length +1);
+    }
+    return input[0];
+}
 
 function addingFunction(a, b, c){
     newNumber = parseInt(input[a]) + parseInt(input[b]);
