@@ -164,25 +164,10 @@ function numberOfSteps(matchingValues, coordArrayA, coordArrayB){
         matchingValuesObject[matchingValues[i]] = i;
     };
     console.log(matchingValuesObject)
-    stepsA=[];
-    x=0
-    while(x<coordArrayA.length){
-        var coordA = coordArrayA[x];
-        if(matchingValuesObject.hasOwnProperty(coordA)) {
-            stepsA.push(coordArrayA.indexOf(coordA)-1);
-        }
-        x++
-    };
+
+    stepsA = matchCrossPoints(coordArrayA, matchingValuesObject);
+    stepsB = matchCrossPoints(coordArrayB, matchingValuesObject);
     console.log(stepsA)
-    stepsB=[];
-    y=0
-    while(y<coordArrayB.length){
-        var coordB = coordArrayB[y];
-        if(matchingValuesObject.hasOwnProperty(coordB)) {
-            stepsB.push(coordArrayB.indexOf(coordB)-1);
-        }
-        y++
-    }
     console.log(stepsB)
 
     totalNumberOfSteps = []
@@ -194,3 +179,18 @@ function numberOfSteps(matchingValues, coordArrayA, coordArrayB){
     totalNumberOfSteps.sort(function(a, b){return a-b});
     return(totalNumberOfSteps)
 }
+
+function matchCrossPoints(coordArray, matchingValuesObject){
+    steps=[];
+    x=0
+    while(x<coordArray.length){
+        var coord = coordArray[x];
+        if(matchingValuesObject.hasOwnProperty(coord)) {
+            steps.push([coordArray.indexOf(coord)-1, coord]);
+        }
+        x++
+    };
+    return steps  
+}
+
+//next use the coordinates from each steps array to match up the steps to add
