@@ -1,6 +1,6 @@
 fs = require('fs');
 
-input = fs.readFileSync('testInput.txt').toString().split("\r\n");
+input = fs.readFileSync('input.txt').toString().split("\r\n");
 
 input.splice(0, 1, input[0].toString().split(","));
 input.splice(1, 1, input[1].toString().split(","));
@@ -17,8 +17,8 @@ wireVectorsB = vectorDirections(input[1]);
 
 coordArrayA = allTheCoordinates(wireVectorsA);
 coordArrayB = allTheCoordinates(wireVectorsB);
-// console.log(coordArrayA);
-// console.log(coordArrayB);
+console.log(coordArrayA);
+console.log(coordArrayB);
 
 
 matchingValues = compareArrays(coordArrayA, coordArrayB);
@@ -51,7 +51,6 @@ function allTheCoordinates(wireVectors){
         aa=0;
         bb=0;
         if(a>0 && b>0){
-            console.log("both pos");
             while(aa<a){
                 while(bb<b){
                     coordArray.push([coordA, coordB])
@@ -63,7 +62,6 @@ function allTheCoordinates(wireVectors){
             }
         }
         else if(a>0 && b<0){
-            console.log("a pos b neg");
             while(aa<a){
                 while(bb>b){
                     coordArray.push([coordA, coordB])
@@ -75,7 +73,6 @@ function allTheCoordinates(wireVectors){
             }
         }
         else if(a<0 && b<0){
-            console.log("both neg");
             while(aa>a){
                 while(bb>b){
                     coordArray.push([coordA, coordB])
@@ -87,7 +84,6 @@ function allTheCoordinates(wireVectors){
             }
         }
         else if(a<0 && b>0){
-            console.log("a neg b pos");
             while(aa>a){
                 while(bb<b){
                     coordArray.push([coordA, coordB])
@@ -99,7 +95,6 @@ function allTheCoordinates(wireVectors){
             }
         }
         else if(a==0 && b>0){
-            console.log("a 0 b pos");
             while(bb<b){
                 coordArray.push([coordA, coordB])
                 bb++;
@@ -110,7 +105,6 @@ function allTheCoordinates(wireVectors){
             console.log("all 0");
         }
         else if(a<0 && b==0){
-            console.log("a neg b 0");
             while(aa>a){
                 coordArray.push([coordA, coordB])
                 aa--;
@@ -118,7 +112,6 @@ function allTheCoordinates(wireVectors){
             }
         }
         else if(a==0 && b<0){
-            console.log("a 0 b neg");
             while(bb>b){
                 coordArray.push([coordA, coordB])
                 bb--;
@@ -126,7 +119,6 @@ function allTheCoordinates(wireVectors){
             }
         }
         else if(a>0 && b==0){
-            console.log("a pos b 0");
             while(aa<a){
                 coordArray.push([coordA, coordB])
                 aa++;
@@ -139,16 +131,17 @@ function allTheCoordinates(wireVectors){
 }
 
 function compareArrays(coordArrayA, coordArrayB){
-    var hash = {};
+    var coordObjectA = {};
     for(var i = 0 ; i < coordArrayA.length; i += 1) {
-        hash[coordArrayA[i]] = i;
+        coordObjectA[coordArrayA[i]] = i;
     }
     x=0
+    // console.log(coordObjectA);
     matchingValues=[];
     while(x<=coordArrayB.length){
-        var val = coordArrayB[x];
-        if(hash.hasOwnProperty(val)) {
-            matchingValues.push(coordArrayB[hash[val]]);
+        var coordB = coordArrayB[x];
+        if(coordObjectA.hasOwnProperty(coordB)) {
+            matchingValues.push(coordArrayB[x]);
         }
         x++
     }
