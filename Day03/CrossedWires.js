@@ -1,31 +1,28 @@
 fs = require('fs');
 
-input = fs.readFileSync('input.txt').toString().split("\r\n");
+input = fs.readFileSync('testInput.txt').toString().split("\r\n");
 
 input.splice(0, 1, input[0].toString().split(","));
 input.splice(1, 1, input[1].toString().split(","));
-// console.log(input[0])
-// console.log(input[1])
 
-
-//wireVectorsA and wireVectorsB
 wireVectorsA = vectorDirections(input[0]);
 wireVectorsB = vectorDirections(input[1]);
-// console.log(wireVectorsA)
-// console.log(wireVectorsB)
-
 
 coordArrayA = allTheCoordinates(wireVectorsA);
 coordArrayB = allTheCoordinates(wireVectorsB);
-console.log(coordArrayA);
-console.log(coordArrayB);
-
+// console.log(coordArrayA);
+// console.log(coordArrayB);
 
 matchingValues = compareArrays(coordArrayA, coordArrayB);
 console.log(matchingValues);
 
 smallestDistance = smallestDistance(matchingValues)
 console.log("The distances where they intersect are " + smallestDistance)
+
+numberOfSteps= numberOfSteps(matchingValues, coordArrayA, coordArrayB)
+console.log(numberOfSteps)
+
+//use the values returned for the intersections (matching values) and test them against the full coordArray for each to get the index then add together
 
 function vectorDirections(wire){
     wireVectors = [[0,0]]
@@ -136,7 +133,6 @@ function compareArrays(coordArrayA, coordArrayB){
         coordObjectA[coordArrayA[i]] = i;
     }
     x=0
-    // console.log(coordObjectA);
     matchingValues=[];
     while(x<=coordArrayB.length){
         var coordB = coordArrayB[x];
@@ -150,13 +146,51 @@ function compareArrays(coordArrayA, coordArrayB){
 
 function smallestDistance(matchingValues){
     a=0
+    smallestDistance=[]
     while(a<matchingValues.length){
         x = matchingValues[a][0];
         y = matchingValues[a][1];
         distance = Math.abs(x) + Math.abs(y);
-        matchingValues.splice(a, 1, distance);
+        smallestDistance.splice(a, 1, distance);
         a++
     }
-    matchingValues.sort(function(a, b){return a-b});
-    return matchingValues;
+    smallestDistance.sort(function(a, b){return a-b});
+    return smallestDistance;
+}
+
+function numberOfSteps(matchingValues, coordArrayA, coordArrayB){
+    var matchingValuesObject = {};
+    for(var i = 0 ; i < matchingValues.length; i += 1) {
+        matchingValuesObject[matchingValues[i]] = i;
+    };
+    console.log(matchingValuesObject)
+    stepsA=[];
+    x=0
+    while(x<coordArrayA.length){
+        var coordA = coordArrayA[x];
+        if(matchingValuesObject.hasOwnProperty(coordA)) {
+            stepsA.push(coordArrayA.indexOf(coordA)-1);
+        }
+        x++
+    };
+    console.log(stepsA)
+    stepsB=[];
+    y=0
+    while(y<coordArrayB.length){
+        var coordB = coordArrayB[y];
+        if(matchingValuesObject.hasOwnProperty(coordB)) {
+            stepsB.push(coordArrayB.indexOf(coordB)-1);
+        }
+        y++
+    }
+    console.log(stepsB)
+
+    totalNumberOfSteps = []
+    z=0
+    while(z<stepsA.length){
+        totalNumberOfSteps.push(stepsA[z]+stepsB[z]);
+        z++
+    }
+    totalNumberOfSteps.sort(function(a, b){return a-b});
+    return(totalNumberOfSteps)
 }
