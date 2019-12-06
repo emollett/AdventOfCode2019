@@ -1,69 +1,66 @@
 fs = require('fs');
+const readline = require('readline');
 
-// for(noun=0; noun<100; noun++){
-//     for(verb=0; verb<100; verb++){
-//         memory = fs.readFileSync('input.txt').toString().split(",");
-//         //the inputs are the values provided for the noun and verb
-//         memory.splice(1, 1, noun);
-//         memory.splice(2, 1, verb);
-
-//         output = readOpcode(memory);
-
-//         if (output == 19690720){
-//             totalAnswer = (100*noun) + verb;
-//             console.log(noun, verb);
-//             console.log(totalAnswer);
-//         }
-//     }
-// }
-
-memory = fs.readFileSync('testInput.txt').toString().split(",");
-console.log(readParameter(memory));
-
-//i is the instruction pointer - it increases by the number of values in the instruction
-function readParameter(memory){
-    paddedParamArray = memory[0].toString().padStart(5, '0').split("");
-    console.log(paddedParamArray)
-    opcode = parseInt(paddedParamArray[3]) + parseInt(paddedParamArray[4])
-    firstParamMode = parseInt(paddedParamArray[2])
-    secondParamMode = parseInt(paddedParamArray[1])
-    thirdParamMode = parseInt(paddedParamArray[0])
-    return opcode
-}
+memory = fs.readFileSync('input.txt').toString().split(",");
+output = readOpcode(memory)
 
 //i is the instruction pointer - it increases by the number of values in the instruction
 function readOpcode(memory){
     i = 0;
     while(i<memory.length){
-        memory[i] == 1 ? addingFunction(memory[i+1], memory[i+2], memory[i+3])
-            : memory[i] == 2 ? multiplyingFunction(memory[i+1], memory[i+2], memory[i+3])
-            : memory[i] == 3 ? storageFunction(memory[i+1])
-            : memory[i] == 4 ? outputtingFunction(memory[i+1])
+        paddedParamArray = readParameter(memory[i]);
+        opcode = paddedParamArray[3];
+        param1 = memory[i+1]
+        param2 = memory[i+2]
+        param3 = memory[i+3]
+        paramMode1 = paddedParamArray[2]
+        paramMode2 = paddedParamArray[1]
+        paramMode3 = paddedParamArray[0]
+        opcode == 1 ? addingFunction(param1, paramMode1, param2, paramMode2, param3, paramMode3)
+            : opcode == 2 ? multiplyingFunction(param1, paramMode1, param2, paramMode2, param3, paramMode3)
+            : opcode == 3 ? storageFunction(param1)
+            : opcode == 4 ? outputtingFunction(param1)
             : i = (memory.length +1);
     }
     return memory[0];
 }
 
-function addingFunction(a, b, c){
-    newNumber = parseInt(memory[a]) + parseInt(memory[b]);
-    memory.splice(parseInt(c), 1, newNumber);
+function readParameter(memory){
+    paddedParamArray = memory.toString().padStart(5, '0').split("");
+    opcode = parseInt(paddedParamArray[3]) + parseInt(paddedParamArray[4])
+    paddedParamArray.splice(3,2,opcode)
+    return paddedParamArray
+}
+
+function addingFunction(param1, paramMode1, param2, paramMode2, param3, paramMode3){
+    //if a is in position mode, it will be at memory[a]. if it is immediate mode, it will be the value of a
+    paramMode1 == 0 ? a = parseInt(memory[param1]) : a = parseInt(param1)
+    paramMode2 == 0 ? b = parseInt(memory[param2]) : b = parseInt(param2)
+    c = parseInt(param3)
+    newNumber = a + b;
+    memory.splice(c, 1, newNumber);
     i = i+4;
 }
 
-function multiplyingFunction(a, b, c){
-    newNumber = parseInt(memory[a]) * parseInt(memory[b]);
-    memory.splice(parseInt(c), 1, newNumber);
+function multiplyingFunction(param1, paramMode1, param2, paramMode2, param3, paramMode3){
+    paramMode1 == 0 ? a = parseInt(memory[param1]) : a = parseInt(param1)
+    paramMode2 == 0 ? b = parseInt(memory[param2]) : b = parseInt(param2)
+    c = parseInt(param3)
+    newNumber = a * b;
+    memory.splice(c, 1, newNumber);
     i=i+4;
 }
 
-function storageFunction(a){
-    //do something to get an input, and save that to integerInput
-    memory.splice(parseInt(a), 1, integerInput);
+function storageFunction(param1){
+    //do something to get an input, and save that to integerInput - for now just giving it 1
+    integerInput = 1;
+    a = parseInt(param1)
+    memory.splice(a, 1, integerInput);
     i=i+2
 }
 
-function outputtingFunction(a){
-    output = memory[i+1];
-    console.log(output) 
+function outputtingFunction(param1){
+    output = parseInt(memory[param1])
+    console.log("The output is " + output) 
     i=i+2
 }
