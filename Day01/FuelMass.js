@@ -1,9 +1,5 @@
 fs = require('fs');
 
-function addingFunction(total, value){
-    return total + value;
-}
-
 //gets the numbers from the provided input file, and splits them into an array stripping out the returns
 input = fs.readFileSync('input.txt').toString().split("\r\n");
 
@@ -22,5 +18,9 @@ for (i=0; i<input.length; i++){
 }
 
 var total = totalMass.reduce(addingFunction);
+
+function addingFunction(total, value){
+    return total + value;
+}
 
 console.log(total)
