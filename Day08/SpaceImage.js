@@ -11,10 +11,35 @@ for(i=0; i<input.length; i++){
     layer = []
     for(a=0; a<pixelsInLayer; a++){
         pixel = input.pop()
-        layer.push(pixel)
+        layer.unshift(pixel)
     }
-    layerArray.push(layer)
+    layerArray.unshift(layer)
 }
+
+imageLine=[]
+for(i=0; i<pixelsInLayer; i++){
+    for(a=0; a<layerArray.length; a++){
+        if(layerArray[a][i] == 0){
+            imageLine.push(0)
+            break
+        } else if(layerArray[a][i] == 1){
+            imageLine.push(1) 
+            break
+        }
+    }
+}
+console.log(imageLine)
+
+imageAssembled=[]
+for(i=0; i<imageLine.length; i++){
+    line=[]
+    for(a=0; a<imageWidth; a++){
+        pixel = imageLine.pop()
+        line.unshift(pixel)
+    }
+    imageAssembled.unshift(line)
+}
+console.log(imageAssembled)
 
 zeroArray = []
 oneArray = []
@@ -35,7 +60,6 @@ for(i=0; i<layerArray.length; i++){
 }
 
 indexOfLeastZeros = indexOfSmallest(zeroArray)
-console.log(indexOfLeastZeros)
 console.log("The number of ones in the layer with least zeros is " + oneArray[indexOfLeastZeros])
 console.log("The number of twos in the layer with least zeros is " + twoArray[indexOfLeastZeros])
 console.log("QA answer " + (oneArray[indexOfLeastZeros] * twoArray[indexOfLeastZeros]))
