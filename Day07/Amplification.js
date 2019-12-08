@@ -1,10 +1,26 @@
 fs = require('fs');
 
-memory = fs.readFileSync('input.txt').toString().split(",");
-output = readOpcode(memory)
+memory = fs.readFileSync('testInput.txt').toString().split(",");
+
+allPermutations = getAllPermutations('01234')
+
+for(i=0; i<allPermutations.length; i++){
+    firstInput = allPermutations[i].split("")
+    output = readOpcode(memory, firstInput)
+    allOutputs = []
+    allOutputs.push(output)
+
+}
+indexOfLargestOutput = indexOfLargest(allOutputs)
+console.log("The largest output is " + allOutputs[indexOfLargestOutput])
+console.log("The input that produces the largest output is " + phaseArray[indexOfLArgestOutput])
+
 
 //i is the instruction pointer - it increases by the number of values in the instruction
-function readOpcode(memory){
+function readOpcode(memory, firstInput){
+    usedFirstInput = false
+    secondInput = 0
+    a=0
     i = 0;
     while(i<memory.length){
         paddedParamArray = readParameter(memory[i]);
@@ -17,7 +33,7 @@ function readOpcode(memory){
         paramMode3 = paddedParamArray[0]
         opcode == 1 ? addingFunction(param1, paramMode1, param2, paramMode2, param3, paramMode3)
             : opcode == 2 ? multiplyingFunction(param1, paramMode1, param2, paramMode2, param3, paramMode3)
-            : opcode == 3 ? storageFunction(param1)
+            : opcode == 3 ? storageFunction(param1, usedFirstInput, a, firstInput, secondInput)
             : opcode == 4 ? outputtingFunction(param1)
             : opcode == 5 ? jumpIfTrueFunction(param1, paramMode1, param2, paramMode2)
             : opcode == 6 ? jumpIfFalseFunction(param1, paramMode1, param2, paramMode2)
@@ -54,8 +70,15 @@ function multiplyingFunction(param1, paramMode1, param2, paramMode2, param3, par
     i=i+4;
 }
 
-function storageFunction(param1){
-    //do something to get an input, and save that to integerInput - for now just giving it 1
+function storageFunction(param1, usedFirstInput, a, firstInput){
+    if(usedFirstInput == false){
+        integerInput = firstInput[a]
+        usedFirstInput = true
+        a++
+    } else {
+        integerInput = secondInput
+        usedFirstInput = false
+    }
     integerInput = 5;
     a = parseInt(param1)
     memory.splice(a, 1, integerInput);
@@ -65,6 +88,7 @@ function storageFunction(param1){
 function outputtingFunction(param1){
     output = parseInt(memory[param1])
     console.log("The output is " + output) 
+    secondInput = output
     i=i+2
 }
 
@@ -92,4 +116,28 @@ function equalsFunction(param1, paramMode1, param2, paramMode2, param3){
     paramMode2 == 0 ? b = parseInt(memory[param2]) : b = parseInt(param2)
     a == b ? memory.splice(param3, 1, 1) : memory.splice(param3, 1, 0)
     i=i+4;
+}
+
+function getAllPermutations(string) {
+    results = [];
+  
+    if (string.length === 1) {
+      results.push(string);
+      return results;
+    }
+  
+    for (i = 0; i < string.length; i++) {
+      firstChar = string[i];
+      charsLeft = string.substring(0, i) + string.substring(i + 1);
+      innerPermutations = getAllPermutations(charsLeft);
+      for (j = 0; j < innerPermutations.length; j++) {
+        results.push(firstChar + innerPermutations[j]);
+      }
+    }
+
+    return results;
+}
+
+function indexOfLargest(a) {
+    return a.indexOf(Math.max.apply(Math, a));
 }
