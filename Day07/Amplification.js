@@ -2,23 +2,28 @@ fs = require('fs');
 
 memory = fs.readFileSync('testInput.txt').toString().split(",");
 
-allPermutations = getAllPermutations('01234')
 
-for(i=0; i<allPermutations.length; i++){
-    firstInput = allPermutations[i].split("")
-    output = readOpcode(memory, firstInput)
-    allOutputs = []
-    allOutputs.push(output)
 
-}
-indexOfLargestOutput = indexOfLargest(allOutputs)
-console.log("The largest output is " + allOutputs[indexOfLargestOutput])
-console.log("The input that produces the largest output is " + phaseArray[indexOfLArgestOutput])
+// allPermutations = getAllPermutations('01234')
+
+// for(i=0; i<allPermutations.length; i++){
+//     firstInput = allPermutations[i].split("")
+//     output = readOpcode(memory, firstInput)
+//     allOutputs = []
+//     allOutputs.push(output)
+
+// }
+// indexOfLargestOutput = indexOfLargest(allOutputs)
+// console.log("The largest output is " + allOutputs[indexOfLargestOutput])
+// console.log("The input that produces the largest output is " + phaseArray[indexOfLArgestOutput])
+
+firstInput = [4, 3, 2, 1, 0]
+var usedFirstInput = false
+output = readOpcode(memory, firstInput, usedFirstInput)
 
 
 //i is the instruction pointer - it increases by the number of values in the instruction
-function readOpcode(memory, firstInput){
-    usedFirstInput = false
+function readOpcode(memory, firstInput, usedFirstInput){
     secondInput = 0
     a=0
     i = 0;
@@ -33,7 +38,7 @@ function readOpcode(memory, firstInput){
         paramMode3 = paddedParamArray[0]
         opcode == 1 ? addingFunction(param1, paramMode1, param2, paramMode2, param3, paramMode3)
             : opcode == 2 ? multiplyingFunction(param1, paramMode1, param2, paramMode2, param3, paramMode3)
-            : opcode == 3 ? storageFunction(param1, usedFirstInput, a, firstInput, secondInput)
+            : opcode == 3 ? storageFunction(param1, a, firstInput, secondInput, usedFirstInput)
             : opcode == 4 ? outputtingFunction(param1)
             : opcode == 5 ? jumpIfTrueFunction(param1, paramMode1, param2, paramMode2)
             : opcode == 6 ? jumpIfFalseFunction(param1, paramMode1, param2, paramMode2)
@@ -52,6 +57,7 @@ function readParameter(memory){
 }
 
 function addingFunction(param1, paramMode1, param2, paramMode2, param3, paramMode3){
+    console.log("addingfunction")
     //if a is in position mode, it will be at memory[a]. if it is immediate mode, it will be the value of a
     paramMode1 == 0 ? a = parseInt(memory[param1]) : a = parseInt(param1)
     paramMode2 == 0 ? b = parseInt(memory[param2]) : b = parseInt(param2)
@@ -62,6 +68,7 @@ function addingFunction(param1, paramMode1, param2, paramMode2, param3, paramMod
 }
 
 function multiplyingFunction(param1, paramMode1, param2, paramMode2, param3, paramMode3){
+    console.log("multiplyingfunction")
     paramMode1 == 0 ? a = parseInt(memory[param1]) : a = parseInt(param1)
     paramMode2 == 0 ? b = parseInt(memory[param2]) : b = parseInt(param2)
     c = parseInt(param3)
@@ -70,7 +77,9 @@ function multiplyingFunction(param1, paramMode1, param2, paramMode2, param3, par
     i=i+4;
 }
 
-function storageFunction(param1, usedFirstInput, a, firstInput){
+function storageFunction(param1, a, firstInput, secondInput, usedFirstInput){
+    console.log("storagefunction")
+    console.log(usedFirstInput)
     if(usedFirstInput == false){
         integerInput = firstInput[a]
         usedFirstInput = true
@@ -79,6 +88,7 @@ function storageFunction(param1, usedFirstInput, a, firstInput){
         integerInput = secondInput
         usedFirstInput = false
     }
+    console.log(integerInput)
     integerInput = 5;
     a = parseInt(param1)
     memory.splice(a, 1, integerInput);
@@ -86,6 +96,7 @@ function storageFunction(param1, usedFirstInput, a, firstInput){
 }
 
 function outputtingFunction(param1){
+    console.log("outputtingfunction")
     output = parseInt(memory[param1])
     console.log("The output is " + output) 
     secondInput = output
@@ -93,18 +104,21 @@ function outputtingFunction(param1){
 }
 
 function jumpIfTrueFunction(param1, paramMode1, param2, paramMode2){
+    console.log("fumpiftruefunction")
     paramMode1 == 0 ? a = parseInt(memory[param1]) : a = parseInt(param1)
     paramMode2 == 0 ? b = parseInt(memory[param2]) : b = parseInt(param2)
     a != 0 ? i = b : i = i+3
 }
 
 function jumpIfFalseFunction(param1, paramMode1, param2, paramMode2){
+    console.log("jumpiffalsefunction")
     paramMode1 == 0 ? a = parseInt(memory[param1]) : a = parseInt(param1)
     paramMode2 == 0 ? b = parseInt(memory[param2]) : b = parseInt(param2)
     a == 0 ? i = b : i = i+3
 }
 
 function lessThanFunction(param1, paramMode1, param2, paramMode2, param3){
+    console.log("lessthanfunction")
     paramMode1 == 0 ? a = parseInt(memory[param1]) : a = parseInt(param1)
     paramMode2 == 0 ? b = parseInt(memory[param2]) : b = parseInt(param2)
     a < b ? memory.splice(param3, 1, 1) : memory.splice(param3, 1, 0)
@@ -112,6 +126,7 @@ function lessThanFunction(param1, paramMode1, param2, paramMode2, param3){
 }
 
 function equalsFunction(param1, paramMode1, param2, paramMode2, param3){
+    console.log("equalsfunction")
     paramMode1 == 0 ? a = parseInt(memory[param1]) : a = parseInt(param1)
     paramMode2 == 0 ? b = parseInt(memory[param2]) : b = parseInt(param2)
     a == b ? memory.splice(param3, 1, 1) : memory.splice(param3, 1, 0)
@@ -141,3 +156,19 @@ function getAllPermutations(string) {
 function indexOfLargest(a) {
     return a.indexOf(Math.max.apply(Math, a));
 }
+
+var usedFirstInput = (function () {
+    var state; // Private Variable
+
+    var usedFirstInput = false;// public object - returned at end of module
+
+    usedFirstInput.changeState = function (newstate) {
+        state = newstate;
+    };
+
+    usedFirstInput.getState = function() {
+        return state;
+    }
+
+    return usedFirstInput; // expose externally
+}());
