@@ -8,22 +8,17 @@ input.splice(1, 1, input[1].toString().split(","));
 wireVectorsA = vectorDirections(input[0]);
 wireVectorsB = vectorDirections(input[1]);
 
-// console.log(wireVectorsA)
-
 coordArrayA = allTheCoordinates(wireVectorsA);
 coordArrayB = allTheCoordinates(wireVectorsB);
-// console.log(coordArrayA);
-// console.log(coordArrayB);
 
 matchingValuesA = compareArrays(coordArrayA, coordArrayB);
 matchingValuesB = compareArrays(coordArrayB, coordArrayA);
-console.log(matchingValuesA)
 
 smallestDistance = smallestDistance(matchingValuesA)
 console.log("The distances where they intersect are " + smallestDistance)
 
-// numberOfSteps= numberOfSteps(matchingValuesA, matchingValuesB, coordArrayA, coordArrayB)
-// console.log("The number of steps is " + numberOfSteps)
+numberOfSteps= numberOfSteps(matchingValuesA, matchingValuesB, coordArrayA, coordArrayB)
+console.log("The number of steps is " + numberOfSteps)
 
 function vectorDirections(wire){
     wireVectors = [[0,0]]
@@ -161,15 +156,22 @@ function smallestDistance(matchingValues){
 
 function numberOfSteps(matchingValuesA, matchingValuesB){
 
-
-
+    var sortedArrayA = matchingValuesA.sort(sortArray);
+    var sortedArrayB = matchingValuesB.sort(sortArray);
 
     totalNumberOfSteps = []
     z=0
-    while(z<matchingValues.length){
-        totalNumberOfSteps.push(matchingValues[z][2]+matchingValues[z][3]);
+    while(z<sortedArrayA.length){
+        totalNumberOfSteps.push(sortedArrayA[z][2]+sortedArrayB[z][2]);
         z++
     }
     totalNumberOfSteps.sort(function(a, b){return a-b});
     return(totalNumberOfSteps)
 }
+
+function sortArray(a, b) {
+    if (a[0] == b[0]) {
+      return a[1] - b[1];
+    }
+    return a[0] - b[0];
+  }
