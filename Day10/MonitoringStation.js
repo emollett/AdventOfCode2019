@@ -21,30 +21,42 @@ for(a=0; a<input.length; a++){
 }
 
 // console.log(asteroidCoordinates)
-detectAsteroids()
+numbersDetected = detectAsteroids()
+// console.log(numbersDetected)
+highestNumberDetected = [...numbersDetected]
+highestNumberDetected.sort(function(a, b){return b-a});
+console.log(highestNumberDetected[0])
+index = numbersDetected.indexOf(highestNumberDetected[0])
+// console.log(index)
+console.log(asteroidCoordinates[index])
 
 function detectAsteroids(){
     numberDetected = []
-    for(e=0; e<asteroidCoordinates.length; e++){
-        monitoringAsteroid = asteroidCoordinates.slice(e,e+1)
-        tempAsteroidCoordinates = asteroidCoordinates.splice(e,1)
-        console.log(asteroidCoordinates)
+    // for(e=0; e<asteroidCoordinates.length; e++){
+        monitoringAsteroid = asteroidCoordinates.slice(7,8)
+        tempAsteroidCoordinates = [...asteroidCoordinates]
+        tempAsteroidCoordinates.splice(7,1)
+        // console.log(monitoringAsteroid)
+        // console.log(tempAsteroidCoordinates)
     
         directions = []
         for(c=0; c<tempAsteroidCoordinates.length; c++){
-            // console.log(tempAsteroidCoordinates[c][0])
+            // console.log(tempAsteroidCoordinates[c][1])
             // console.log(Number(monitoringAsteroid[0][0]))
-            directions.push([tempAsteroidCoordinates[c][0]-monitoringAsteroid[0][0], tempAsteroidCoordinates[c][1]-monitoringAsteroid[0][0]])
+            directions.push([tempAsteroidCoordinates[c][0]-monitoringAsteroid[0][0], tempAsteroidCoordinates[c][1]-monitoringAsteroid[0][1]])
         }
-        // console.log(directions)
+        console.log(directions)
         values = []
         for(d=0; d<directions.length; d++){
+            //current issue is here -> -1/-2 is the same as 1/2 - need to give directionality
             values.push(directions[d][0]/directions[d][1])
         }
-        // console.log(values)
+        console.log(values)
+        //there is another issue here, with sets -0 is the same as 0, I need them not to be
         dedupedValues = Array.from(new Set(values))
         // console.log(dedupedValues)
         numberDetected.push(dedupedValues.length)
-    }
-    // console.log(numberDetected)
+    // }
+    return numberDetected
+
 }
