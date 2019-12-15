@@ -21,3 +21,10 @@ for(b=0; b<reactionsArray.length; b++){
 
 //need a recursive function that takes an input which it looks for in reactionsAray[a][-1], then returns the other constituents which it then runs the function on
 console.log(reactionsArray)
+
+function calculateORE(product, ammount){
+    //find the recipe that has the produce as -1
+    //get the ingredients - everything up to =>
+    //if one of the ingredients is ORE do something
+    //if it isn't, this function needs to be run again
+}
