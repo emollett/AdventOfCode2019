@@ -32,24 +32,18 @@ function calculateORE(){
     //find the recipe that has the product as -1
     findLocationOfProduct(product);
 
-    // get the ingredients - everything up to =>
-    for(j=0; reactionsArray[locationOfProduct].length; j++){
-        if(reactionsArray[locationOfProduct][j] == "=>"){
-            break
-        }
-        ingredients.push(reactionsArray[locationOfProduct][j])
-    }
+    findTheIngredients()
 
     // console.log(ingredients)
     
-    for(k=0; ingredients.length; k++){
+    for(k=0; k<ingredients.length; k++){
         let product = ingredients[k][1]
-        findLocationOfProduct(product)
+        if(product != "ORE"){
+            findLocationOfProduct(product)
+            findTheIngredients() 
+        }
     }
-
-    
-    //if one of the ingredients is ORE do something
-    //if it isn't, this function needs to be run again
+console.log(ingredients)
 }
 
 function findLocationOfProduct(product){
@@ -61,4 +55,15 @@ function findLocationOfProduct(product){
     }
     console.log("The product is at location " + locationOfProduct)
     return locationOfProduct
+}
+
+function findTheIngredients(){
+    // get the ingredients - everything up to =>
+    for(j=0; reactionsArray[locationOfProduct].length; j++){
+        if(reactionsArray[locationOfProduct][j] == "=>"){
+            break
+        }
+        //instead of doing this, I need to replace the previous ingredient with its own ingredients
+        ingredients.push(reactionsArray[locationOfProduct][j])
+    }
 }
