@@ -26,4 +26,85 @@ while(a<passesFirstTest.length){
     a++;
 }
 
-console.log(passesSecondTest.length)
+passesThirdTest = [];
+for(b=0; b<passesSecondTest.length; b++){
+    thirdArray = Array.from(passesSecondTest[b].toString())
+    //aaaaab
+    if(thirdArray[0] == thirdArray[1] 
+        && thirdArray[1] == thirdArray[2]
+        && thirdArray[2] == thirdArray[3]
+        && thirdArray[3] == thirdArray[4]
+        && thirdArray[4] != thirdArray[5]){
+            // console.log(thirdArray + " GONE aaaaab")
+        } 
+    //baaaaa
+    else if(thirdArray[1] == thirdArray[2] 
+        && thirdArray[2] == thirdArray[3]
+        && thirdArray[3] == thirdArray[4]
+        && thirdArray[4] == thirdArray[5]
+        && thirdArray[0] != thirdArray[1]){
+            // console.log(thirdArray + " GONE baaaaa")
+        } 
+    //aaaabc
+    else if(thirdArray[0] == thirdArray[1] 
+        && thirdArray[1] == thirdArray[2]
+        && thirdArray[2] == thirdArray[3]
+        && thirdArray[4] != thirdArray[5]){
+            // console.log(thirdArray + " GONE aaaabc")
+        } 
+    //baaaac
+    else if(thirdArray[1] == thirdArray[2] 
+        && thirdArray[2] == thirdArray[3]
+        && thirdArray[3] == thirdArray[4]){
+            // console.log(thirdArray + " GONE baaaac")
+        } 
+    //bcaaaa
+    else if(thirdArray[2] == thirdArray[3] 
+        && thirdArray[3] == thirdArray[4]
+        && thirdArray[4] == thirdArray[5]
+        && thirdArray[0] != thirdArray[1]){
+            // console.log(thirdArray + " GONE bcaaaa")
+        } 
+    //aaabcd
+    else if(thirdArray[0] == thirdArray[1]
+        && thirdArray[1] == thirdArray[2]
+        && thirdArray[3] != thirdArray[4]
+        && thirdArray[4] != thirdArray[5]
+        && thirdArray[2] != thirdArray[3]){
+            // console.log(thirdArray + " GONE aaabcd")
+        } 
+    //baaacd
+    else if(thirdArray[1] == thirdArray[2]
+        && thirdArray[2] == thirdArray[3]
+        && thirdArray[4] != thirdArray[5]){
+            // console.log(thirdArray + " GONE baaacd")
+        } 
+    //bcaaad
+    else if(thirdArray[2] == thirdArray[3]
+        && thirdArray[3] == thirdArray[4]
+        && thirdArray[0] != thirdArray[1]){
+            // console.log(thirdArray + " GONE bcaaad")
+        }
+    //bcdaaa
+    else if(thirdArray[3] == thirdArray[4]
+        && thirdArray[4] == thirdArray[5]
+        && thirdArray[0] != thirdArray[1]
+        && thirdArray[1] != thirdArray[2]
+        && thirdArray[2] != thirdArray[3]){
+            // console.log(thirdArray + " GONE bcdaaa")
+        }
+    //aaabbb
+    else if(thirdArray[0] == thirdArray[1]
+        && thirdArray[1]==thirdArray[2]
+        && thirdArray[2] != thirdArray[3]
+        && thirdArray[3] == thirdArray[4]
+        && thirdArray[4] == thirdArray[5]){
+            // console.log(thirdArray + " GONE aaabbb")
+        }
+    else {
+        console.log(thirdArray + " IN")
+        passesThirdTest.push(thirdArray)
+    }
+}
+// console.log(passesThirdTest)
+console.log(passesThirdTest.length)
